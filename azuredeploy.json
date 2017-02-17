@@ -25,7 +25,7 @@
       "properties": {
         "mode": "incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/webappdeploy/webappdeploy.json",
+          "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/webapps/azuredeploy.json",
           "contentVersion": "1.0.0.0"
         }
       }
