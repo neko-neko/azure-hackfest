@@ -4,7 +4,13 @@
   "parameters": {
     "storageAccountType": {
       "defaultValue": "Standard_LRS",
-      "type": "String"
+      "type": "string"
+    },
+    "sqladminName": {
+      "type" : "securestring"
+    },
+    "sqladminPassword" : {
+      "type" : "securestring"
     }
   },
   "variables": {
@@ -75,7 +81,28 @@
            ]
          }
        }
+    },
+    {
+        "apiVersion": "2015-01-01",
+        "name": "nestedTemplateForSQL",
+        "type": "Microsoft.Resources/deployments",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/sqltemplate.json",
+                "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "sqladminName": {
+                "value": "[parameters('sqladminName')]"
+              },
+              "sqladminPassword" : {
+                "value": "[parameters('sqladminPassword')]"
+              }
+            }
+        }
     }
+
   ],
   "outputs": {
     "serverfarmName": {

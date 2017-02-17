@@ -26,6 +26,8 @@
         }
     },
     "variables": {
+        // "sqlServerName" : "[concat('sqldbs',uniqueString(resourceGroup().id))]",
+        // "sqlDatabaseName" : "[concat('sqldb',uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
