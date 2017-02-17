@@ -17,6 +17,12 @@
         "firewallRules_AllowAllWindowsAzureIps_name": {
             "defaultValue": "automasotadbs/AllowAllWindowsAzureIps",
             "type": "String"
+        },
+        "sqladminName": {
+            "type" : "securestring"
+        },
+        "sqladminPassword" : {
+            "type" : "securestring"
         }
     },
     "variables": {
@@ -29,8 +35,8 @@
             "apiVersion": "2014-04-01-preview",
             "location": "Japan East",
             "properties": {
-                "administratorLogin": "<input your username>",
-                "administratorLoginPassword": "<input your password>",
+                "administratorLogin": "[parameters('sqladminName')]",
+                "administratorLoginPassword": "[parameters('sqladminPassword')]",
                 "version": "12.0"
             },
             "resources": [],
