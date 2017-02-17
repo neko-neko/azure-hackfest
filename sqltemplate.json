@@ -1,0 +1,107 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "servers_automasotadbs_name": {
+            "defaultValue": "automasotadbs",
+            "type": "String"
+        },
+        "databases_automasotadb_name": {
+            "defaultValue": "automasotadbs/automasotadb",
+            "type": "String"
+        },
+        "databases_master_name": {
+            "defaultValue": "automasotadbs/master",
+            "type": "String"
+        },
+        "firewallRules_AllowAllWindowsAzureIps_name": {
+            "defaultValue": "automasotadbs/AllowAllWindowsAzureIps",
+            "type": "String"
+        }
+    },
+    "variables": {
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "kind": "v12.0",
+            "name": "[parameters('servers_automasotadbs_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "Japan East",
+            "properties": {
+                "administratorLogin": "<input your username>",
+                "administratorLoginPassword": "<input your password>",
+                "version": "12.0"
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "kind": "v12.0,user",
+            "name": "[parameters('databases_automasotadb_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "Japan East",
+            "properties": {
+                "edition": "Standard",
+                "status": "Online",
+                "serviceLevelObjective": "S0",
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": "268435456000",
+                "requestedServiceObjectiveName": "S0",
+                "sampleName": null,
+                "defaultSecondaryLocation": "Japan West",
+                "containmentState": 2,
+                "readScale": "Disabled",
+                "failoverGroupId": null
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_automasotadbs_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "kind": "v12.0,system",
+            "name": "[parameters('databases_master_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "Japan East",
+            "properties": {
+                "edition": "System",
+                "status": "Online",
+                "serviceLevelObjective": "System2",
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "maxSizeBytes": "32212254720",
+                "defaultSecondaryLocation": "Japan West",
+                "containmentState": 2,
+                "readScale": "Disabled",
+                "failoverGroupId": null
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_automasotadbs_name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "kind": "v12.0",
+            "name": "[parameters('firewallRules_AllowAllWindowsAzureIps_name')]",
+            "apiVersion": "2014-04-01-preview",
+            "location": "Japan East",
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            },
+            "resources": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('servers_automasotadbs_name'))]"
+            ]
+        }
+    ],
+    "outputs": {
+        "sqldbName":{
+            "type": "string",
+            "value": "[parameters('databases_automasotadb_name')]"
+        }
+    }
+}
