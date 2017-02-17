@@ -2,22 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "servers_automasotadbs_name": {
-            "defaultValue": "automasotadbs",
-            "type": "string"
-        },
-        "databases_automasotadb_name": {
-            "defaultValue": "automasotadbs/automasotadb",
-            "type": "string"
-        },
-        "databases_master_name": {
-            "defaultValue": "automasotadbs/master",
-            "type": "string"
-        },
-        "firewallRules_AllowAllWindowsAzureIps_name": {
-            "defaultValue": "automasotadbs/AllowAllWindowsAzureIps",
-            "type": "string"
-        },
         "sqladminName": {
             "type" : "securestring"
         },
@@ -26,14 +10,16 @@
         }
     },
     "variables": {
-        // "sqlServerName" : "[concat('sqldbs',uniqueString(resourceGroup().id))]",
-        // "sqlDatabaseName" : "[concat('sqldb',uniqueString(resourceGroup().id))]"
+        "sqlServerName" : "[concat('sqldbs-',uniqueString(resourceGroup().id))]",
+        "sqlDatabaseName" : "[concat(variables('sqlServerName'),'/defaultdb')]",
+        "masterDatabaseName" : "[concat(variables('sqlServerName'),'/master')]",
+        "firewallRuleName" : "[concat(variables('sqlServerName'),'/AllowAllWindowsAzureIps')]"
     },
     "resources": [
         {
             "type": "Microsoft.Sql/servers",
             "kind": "v12.0",
-            "name": "[parameters('servers_automasotadbs_name')]",
+            "name": "[variables('sqlServerName')]",
             "apiVersion": "2014-04-01-preview",
             "location": "Japan East",
             "properties": {
@@ -47,7 +33,7 @@
         {
             "type": "Microsoft.Sql/servers/databases",
             "kind": "v12.0,user",
-            "name": "[parameters('databases_automasotadb_name')]",
+            "name": "[variables('sqlDatabaseName')]",
             "apiVersion": "2014-04-01-preview",
             "location": "Japan East",
             "properties": {
@@ -65,13 +51,13 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_automasotadbs_name'))]"
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
             ]
         },
         {
             "type": "Microsoft.Sql/servers/databases",
             "kind": "v12.0,system",
-            "name": "[parameters('databases_master_name')]",
+            "name": "[variables('masterDatabaseName')]",
             "apiVersion": "2014-04-01-preview",
             "location": "Japan East",
             "properties": {
@@ -87,13 +73,13 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_automasotadbs_name'))]"
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
             ]
         },
         {
             "type": "Microsoft.Sql/servers/firewallrules",
             "kind": "v12.0",
-            "name": "[parameters('firewallRules_AllowAllWindowsAzureIps_name')]",
+            "name": "[variables('firewallRuleName')]",
             "apiVersion": "2014-04-01-preview",
             "location": "Japan East",
             "properties": {
@@ -102,14 +88,8 @@
             },
             "resources": [],
             "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', parameters('servers_automasotadbs_name'))]"
+                "[resourceId('Microsoft.Sql/servers', variables('sqlServerName'))]"
             ]
         }
-    ],
-    "outputs": {
-        "sqldbName":{
-            "type": "string",
-            "value": "[parameters('databases_automasotadb_name')]"
-        }
-    }
+    ]
 }
