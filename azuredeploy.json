@@ -43,7 +43,7 @@
         "properties": {
             "mode": "Incremental",
             "templateLink": {
-                "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/sqltemplate.json",
+                "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/sql/sqltemplate.json",
                 "contentVersion": "1.0.0.0"
             },
             "parameters": {
