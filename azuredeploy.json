@@ -78,9 +78,21 @@
     }
   ],
   "outputs": {
+    "serverfarmName": {
+      "type": "string",
+      "value": "[variables('serverfarmsName')]"
+    },
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    },
     "storageAccountId" : {
-      "type" : "string",
+      "type": "string",
       "value": "[variables('storageAccountId')]"
+    },
+    "functionName": {
+      "type": "string",
+      "value": "[variables('functionName')]"
     }
   }
 }
