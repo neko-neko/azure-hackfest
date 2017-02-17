@@ -1,7 +1,16 @@
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {},
+  "parameters": {
+    "sqladminName": {
+      "type" : "securestring"
+    },
+    "sqladminPassword" : {
+      "type" : "securestring"
+    }
+  },
+  "variables": {
+  },
   "resources": [
     {
       "name": "functions",
@@ -26,7 +35,26 @@
           "contentVersion": "1.0.0.0"
         }
       }
+    },
+    {
+        "apiVersion": "2015-01-01",
+        "name": "nestedTemplateForSQL",
+        "type": "Microsoft.Resources/deployments",
+        "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+                "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/sqltemplate.json",
+                "contentVersion": "1.0.0.0"
+            },
+            "parameters": {
+              "sqladminName": {
+                "value": "[parameters('sqladminName')]"
+              },
+              "sqladminPassword" : {
+                "value": "[parameters('sqladminPassword')]"
+              }
+            }
+        }
     }
   ]
 }
-
