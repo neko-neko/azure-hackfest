@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+  },
+  "variables": {
+    "serverfarmsName": "[concat(uniqueString(resourceGroup().id),'serverfarms')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2015-04-01",
+      "name": "[variables('serverfarmsName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "name": "[variables('serverfarmsName')]",
+        "computeMode": "Dynamic",
+        "sku": "Dynamic"
+      }
+    }
+  ],
+  "outputs": {
+    "serverfarmName": {
+      "type": "string",
+      "value": "[variables('serverfarmsName')]"
+    }
+  }
+}
+
