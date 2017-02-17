@@ -1,0 +1,63 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "String"
+    },
+    "storageAccountId": {
+      "type": "String"
+    },
+    "sqlServerName": {
+      "type": "String"
+    },
+    "databaseName": {
+      "type": "String"
+    },
+    "sqlServerUserName": {
+      "type": "String"
+    },
+    "sqlServerPassword": {
+      "type": "String"
+    }
+  },
+  "variables": {
+    "dataFactoryName": "[concat(uniqueString(resourceGroup().id),'datafactory')]",
+    "dataFactoryLocation": "westus",
+    "linkedServiceName": "[concat(uniqueString(resourceGroup().id),'linked')]",
+    "linkedSqlServiceName": "[concat(uniqueString(resourceGroup().id),'linkedsql')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.DataFactory/datafactories",
+      "name": "[variables('dataFactoryName')]",
+      "apiVersion": "2015-10-01",
+      "location": "[variables('dataFactoryLocation')]"
+    },
+    {
+      "type": "linkedservices",
+      "name": "[variables('linkedServiceName')]",
+      "apiVersion": "2015-10-01",
+      "properties": {
+        "type": "AzureStorage",
+        "typeProperties": {
+          "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',parameters('storageAccountId'))]"
+        }
+      },
+      "dependsOn": [
+        "[variables('dataFactoryName')]"
+      ]
+    },
+    {
+      "type": "linkedservices",
+      "name": "[variables('linkedSqlServiceName')]",
+      "apiVersion": "2015-10-01",
+      "properties": {
+        "type": "AzureSqlDatabase",
+        "typeProperties": {
+          "connectionString": "[concat('Server=tcp:',parameters('sqlServerName'),'.database.windows.net,1433;Database=', parameters('databaseName'), ';User ID=',parameters('sqlServerUserName'),';Password=',parameters('sqlServerPassword'),';Trusted_Connection=False;Encrypt=True;Connection Timeout=30')]"
+        }
+      }
+    }
+  ]
+}
