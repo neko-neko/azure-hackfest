@@ -13,6 +13,18 @@
   },
   "resources": [
     {
+      "name": "common",
+      "apiVersion": "2015-01-01",
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/common/azuredeploy.json",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    },
+    {
       "name": "functions",
       "apiVersion": "2015-01-01",
       "type": "Microsoft.Resources/deployments",
@@ -21,6 +33,11 @@
         "templateLink": {
           "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/functions/azuredeploy.json",
           "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "serverfarmsName": {
+            "value": "[reference('common').outputs.serverfarmName.value]"
+          }
         }
       }
     },
@@ -35,26 +52,6 @@
           "contentVersion": "1.0.0.0"
         }
       }
-    },
-    {
-        "apiVersion": "2015-01-01",
-        "name": "nestedTemplateForSQL",
-        "type": "Microsoft.Resources/deployments",
-        "properties": {
-            "mode": "Incremental",
-            "templateLink": {
-                "uri": "https://raw.githubusercontent.com/neko-neko/azure-hackfest/master/sql/sqltemplate.json",
-                "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-              "sqladminName": {
-                "value": "[parameters('sqladminName')]"
-              },
-              "sqladminPassword" : {
-                "value": "[parameters('sqladminPassword')]"
-              }
-            }
-        }
     }
   ]
 }
